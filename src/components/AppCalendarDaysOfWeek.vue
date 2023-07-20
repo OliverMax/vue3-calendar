@@ -1,16 +1,16 @@
 <template>
-  <ul data-component-name="AppCalendarDaysOfWeek">
-    <li v-for="(day, idx) in daysOfWeek" :key="day" :class="{ weekday: idx > 4 }">
+  <ul data-component-name='AppCalendarDaysOfWeek'>
+    <li v-for='(day, idx) in daysOfWeek' :key='day' :class='{ weekday: idx > 4 }'>
       {{ day }}
     </li>
   </ul>
 </template>
 
-<script setup lang="ts">
+<script setup lang='ts'>
 const daysOfWeek = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
 </script>
 
-<style scoped lang="scss">
+<style scoped lang='scss'>
 ul[data-component-name='AppCalendarDaysOfWeek'] {
   display: flex;
   align-items: center;

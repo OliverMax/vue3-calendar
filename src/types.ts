@@ -1,6 +1,6 @@
 export type CalendarDay = {
   pure: { day: number; date: number; month: number; year: number; full: Date }
-  formatted: { date: string; month: string; year: string; full: string }
+  formatted: { day: number, date: string; month: string; year: string; full: string }
 }
 
 export type ShortAction = {

@@ -1,18 +1,22 @@
-export default function formatDate(
-  date: number,
-  month: number,
-  year: number
-): Record<'date' | 'month' | 'year' | 'full', string> {
-  let formattedDate = date.toString()
-  if (formattedDate.length === 1) formattedDate = `0${formattedDate}`
+import getDay from './getDay'
+import isValidDate from './isValidDate'
 
-  let formattedMonth = (month + 1).toString()
+import type { CalendarDay } from '@/types'
+
+export default function formatDate(date: Date): CalendarDay['formatted'] | undefined {
+  if (!isValidDate(date)) return
+
+  const formattedDay = getDay(date)!
+  const formattedDate = date.getDate().toString()
+
+  let formattedMonth = (date.getMonth() + 1).toString()
   if (formattedMonth.length === 1) formattedMonth = `0${formattedMonth}`
 
-  const formattedYear = year.toString().substring(2)
-  const formattedFull = `${formattedDate}.${formattedMonth}.${formattedYear}`
+  const formattedYear = date.getFullYear().toString().substring(2)
+  const formattedFull = `0${formattedDate}.${formattedMonth}.${formattedYear}`
 
   return {
+    day: formattedDay,
     date: formattedDate,
     month: formattedMonth,
     year: formattedYear,

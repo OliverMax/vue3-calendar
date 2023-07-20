@@ -14,7 +14,7 @@
             year === day.pure.year &&
             month === day.pure.month &&
             date === day.pure.date,
-          weekend: [0, 6].includes(day.pure.day),
+          weekend: day.formatted.day > 4,
         }"
         @click='dayClickHandler(day.pure.full)'
       >
@@ -31,8 +31,11 @@
 </template>
 
 <script lang='ts' setup>
+// TODO: week ca starts from Monday/Sunday
+// TODO: allow user to hide weekends
+
 import { computed } from 'vue'
-import formatDate from '@/utils/formatDate'
+import { getDay, formatDate } from '@/utils'
 import type { CalendarDay } from '@/types'
 
 const props = withDefaults(defineProps<{ date: Date }>(), { date: () => new Date() })
@@ -46,29 +49,23 @@ const monthStarts = computed(() => new Date(year.value, month.value, 1))
 const monthEnds = computed(() => new Date(year.value, month.value + 1, 0))
 const daysInMonth = computed(() => monthEnds.value.getDate())
 
-const weeks = computed(
-  () => (monthStarts.value.getDay() - 1 + daysInMonth.value + (7 - monthEnds.value.getDay())) / 7
-)
+const weeks = computed(() => (getDay(monthStarts.value) + daysInMonth.value + 6 - getDay(monthEnds.value)) / 7)
 
 const days = computed(() => {
   const res: CalendarDay[] = []
 
-  for (let i = 1; i <= weeks.value * 7; i++) {
-    const pureFull = new Date(year.value, month.value, i + 1 - monthStarts.value.getDay())
-
-    const pureDate = pureFull.getDate()
-    const pureMonth = pureFull.getMonth()
-    const pureYear = pureFull.getFullYear()
+  for (let i = 0; i < weeks.value * 7; i++) {
+    const pureFull = new Date(year.value, month.value, (i + 1) - getDay(monthStarts.value))
 
     res.push({
       pure: {
         day: pureFull.getDay(),
-        date: pureDate,
-        month: pureMonth,
-        year: pureYear,
+        date: pureFull.getDate(),
+        month: pureFull.getMonth(),
+        year: pureFull.getFullYear(),
         full: pureFull
       },
-      formatted: formatDate(pureDate, pureMonth, pureYear)
+      formatted: formatDate(pureFull)
     })
   }
 
