@@ -1,6 +1,10 @@
 <template>
-  <ul data-component-name='AppCalendarDaysOfWeek'>
-    <li v-for='(day, idx) in daysOfWeek' :key='day' :class='{ weekday: idx > 4 }'>
+  <ul data-component-name='AppMonthDaysOfWeek'>
+    <li
+      v-for='(day, idx) in daysOfWeek'
+      :key='day'
+      :class='{ weekday: idx > 4 /* index for Friday */ }'
+    >
       {{ day }}
     </li>
   </ul>
@@ -11,7 +15,7 @@ const daysOfWeek = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
 </script>
 
 <style scoped lang='scss'>
-ul[data-component-name='AppCalendarDaysOfWeek'] {
+ul[data-component-name='AppMonthDaysOfWeek'] {
   display: flex;
   align-items: center;
   justify-content: space-between;

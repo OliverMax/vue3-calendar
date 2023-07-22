@@ -15,3 +15,7 @@ ul {
 span {
   display: block;
 }
+
+input {
+  outline: none;
+}

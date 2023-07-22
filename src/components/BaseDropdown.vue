@@ -1,19 +1,20 @@
 <template>
   <div
-    data-component-name='AppCalendarMonths'
+    data-component-name='BaseDropdown'
+    v-click-outside='clickOutsideHandler'
     @click='onClick'
   >
-    <span>{{ activeMonthName }}</span>
+    <span>{{ activeOption }}</span>
 
     <ul v-if='isOpened'>
       <li
-        v-for='(monthsItem, index) of props.monthsList'
-        :key='monthsItem'
-        :class='{ active: monthsItem === activeMonthName }'
+        v-for='(option, index) of props.options'
+        :key='option'
+        :class='{ active: option === activeOption }'
         ref='itemRefs'
-        @click='onMonthClick(index)'
+        @click='onSelectOption(index)'
       >
-        {{ monthsItem }}
+        {{ option }}
       </li>
     </ul>
   </div>
@@ -24,43 +25,34 @@ import { computed, ref, watch, nextTick } from 'vue'
 
 const props = withDefaults(
   defineProps<{
-    date: Date,
-    monthsList?: string[]
+    modelValue: number,
+    options?: any[]
   }>(),
   {
-    date: () => new Date(),
-    monthsList: () => [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December'
-    ]
+    modelValue: 0,
+    options: () => []
   }
 )
 
-const emits = defineEmits<{ 'update:date': [date: Date] }>()
+const emits = defineEmits<{ 'update:modelValue': [value: number] }>()
 
-const activeMonthName = computed(() => props.monthsList[props.date.getMonth()])
+const activeOption = computed(() => props.options[props.modelValue])
 
 const isOpened = ref(false)
 
-const onMonthClick = (idx: number) => emits(
-  'update:date',
-  new Date(new Date(Number(props.date)).setMonth(idx))
-)
+const onSelectOption = (index: number) => emits('update:modelValue', index);
 
 const onClick = () => (isOpened.value = !isOpened.value)
 
+const clickOutsideHandler = () => {
+  if (isOpened.value) {
+    isOpened.value = false;
+  }
+};
+
 const itemRefs = ref([])
 
+// FIXME
 watch(isOpened, value => {
   if (value) {
     nextTick(() => itemRefs.value
@@ -74,7 +66,7 @@ watch(isOpened, value => {
 <style scoped lang='scss'>
 @import "@/styles/scss/mixins";
 
-[data-component-name='AppCalendarMonths'] {
+div {
   position: relative;
 
   cursor: pointer;

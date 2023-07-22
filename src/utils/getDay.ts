@@ -1,7 +1,8 @@
+import { DAYS_IN_WEEK } from '@/constants'
+
 import isValidDate from './isValidDate'
 import shiftRight from './shiftRight'
 
-const DAYS_IN_WEEK = 7
 const DEFAULT_DAYS_ORDER = [0, 1, 2, 3, 4, 5, 6]
 
 let savedInitialDay: number
